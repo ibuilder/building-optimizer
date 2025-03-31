@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Selection & 3D Model Viewer</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Building Optimizer</h1>
+        
+        <!-- Progress bar -->
+        <div class="progress mb-4">
+            <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 33%;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">Step 1 of 3</div>
+        </div>
+        
+        <!-- Step 1: Address Input -->
+        <div id="step-1" class="step-container active">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Step 1: Enter Address</h3>
+                </div>
+                <div class="card-body">
+                    <form id="address-form">
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Full Address</label>
+                            <input type="text" class="form-control" id="address" placeholder="Enter full address" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="city" class="form-label">City</label>
+                            <input type="text" class="form-control" id="city" placeholder="City" required>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="state" class="form-label">State/Province</label>
+                                <input type="text" class="form-control" id="state" placeholder="State/Province" required>
+                            </div>
+                            <div class="col">
+                                <label for="zip" class="form-label">Zip/Postal Code</label>
+                                <input type="text" class="form-control" id="zip" placeholder="Zip/Postal Code" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="country" class="form-label">Country</label>
+                            <input type="text" class="form-control" id="country" placeholder="Country" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Find Address</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 2: Address Verification -->
+        <div id="step-2" class="step-container">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Step 2: Verify Address</h3>
+                </div>
+                <div class="card-body">
+                    <p>Please select the correct address from the options below:</p>
+                    <div id="map"></div>
+                    <div id="address-options" class="row"></div>
+                    <div class="mt-3">
+                        <button id="back-to-step-1" class="btn btn-secondary">Back</button>
+                        <button id="proceed-to-step-3" class="btn btn-primary" disabled>Proceed</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 3: 3D Model Visualization -->
+        <div id="step-3" class="step-container">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Step 3: Optimized Building Model</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">Location Details</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p id="selected-address">No address selected</p>
+                                    <div id="lot-size-info">
+                                        <strong>Estimated Lot Size:</strong> <span id="lot-size">Calculating...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card mt-3">
+                                <div class="card-header bg-light">
+                                    <h5 class="mb-0">Building Parameters</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="building-params-form">
+                                        <div class="mb-3">
+                                            <label for="floor-area-ratio" class="form-label">Target Floor Area Ratio (FAR)</label>
+                                            <input type="number" class="form-control" id="floor-area-ratio" value="2.0" min="0.1" max="10" step="0.1">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="num-floors" class="form-label">Number of Floors</label>
+                                            <input type="number" class="form-control" id="num-floors" value="3" min="1" max="50" step="1">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Update Model</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div id="model-viewer">
+                                <div id="loading-indicator" class="text-center">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="mt-2">Generating optimized building model...</p>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <button id="back-to-step-2" class="btn btn-secondary">Back</button>
+                                <button id="reset" class="btn btn-danger float-end">Start Over</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <!-- Google Maps API (Note: You'll need to replace YOUR_API_KEY with an actual API key) -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places" defer></script>
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- OrbitControls for Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/examples/js/controls/OrbitControls.js"></script>
+    <!-- Custom JS -->
+    <script src="js/app.js"></script>
+</body>
+</html>

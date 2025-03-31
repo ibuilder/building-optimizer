@@ -1,0 +1,47 @@
+/* Map container styles */
+#map {
+    height: 300px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* 3D model viewer styles */
+#model-viewer {
+    height: 500px;
+    width: 100%;
+    background-color: #f8f9fa;
+    position: relative;
+}
+
+/* Loading indicator styles */
+#loading-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Step container styles */
+.step-container {
+    display: none;
+}
+
+.step-container.active {
+    display: block;
+}
+
+/* Address card styles */
+.address-card {
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.address-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.address-card.selected {
+    border: 2px solid #0d6efd;
+    background-color: rgba(13, 110, 253, 0.1);
+}
